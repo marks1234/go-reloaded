@@ -162,7 +162,7 @@ func main() {
 	})
 
 	// removes white space
-	space := regexp.MustCompile(`\s+`)
+	space := regexp.MustCompile(` +`)
 	s := space.ReplaceAllString(apostrophe_wrap, " ")
 	file.WriteString(s)
 }
