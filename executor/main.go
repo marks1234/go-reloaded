@@ -1,8 +1,8 @@
 package main
 
 import (
+	"fmt"
 	"os"
-	"regexp"
 	"strconv"
 	"strings"
 
@@ -67,6 +67,7 @@ func commandFulfill(text string) string {
 	var brackets int
 	var start int
 	var result []string
+	text += " x"
 
 	for i, r := range text {
 		switch r {
@@ -136,32 +137,32 @@ func main() {
 	defer file.Close()
 
 	// compiles the search for later commands
-	re := regexp.MustCompile("\\((bin|hex|cap|up|low),? ?\\d?\\)")
+	// re := regexp.MustCompile("\\((bin|hex|cap|up|low),? ?\\d?\\)")
 	text_without_commands := commandFulfill(str_dat)
 	// replaces all the commands in between () with a blank space
-	text_without_commands = re.ReplaceAllString(text_without_commands, "")
+	// text_without_commands = re.ReplaceAllString(text_without_commands, "")
 
 	// removes the white spaces before the punctuations
-	re = regexp.MustCompile(` +[,.:;!?]`)
-	text_signs_correct := re.ReplaceAllStringFunc(string(text_without_commands), strings.TrimSpace)
+	// re = regexp.MustCompile(` +[,.:;!?]`)
+	// text_signs_correct := re.ReplaceAllStringFunc(string(text_without_commands), strings.TrimSpace)
 
 	// adds space after specific punctuations
-	re = regexp.MustCompile(`[,.:;!?][\w\d]`)
-	text_signs_correct = re.ReplaceAllStringFunc(string(text_signs_correct), func(s string) string {
-		s_arr := strings.Split(s, "")
-		return s_arr[0] + " " + s_arr[1]
-	})
+	// re = regexp.MustCompile(`[,.:;!?][\w\d]`)
+	// text_signs_correct = re.ReplaceAllStringFunc(string(text_signs_correct), func(s string) string {
+	// 	s_arr := strings.Split(s, "")
+	// 	return s_arr[0] + " " + s_arr[1]
+	// })
 
 	// removes white space between parantheses
-	re = regexp.MustCompile(`'(.*?)'`)
-	apostrophe_wrap := re.ReplaceAllStringFunc(text_signs_correct, func(s string) string {
-		clean := strings.TrimSpace(s[1:])
-		clean = strings.TrimSpace(clean[:len(clean)-1])
-		return "'" + clean + "'"
-	})
+	// re = regexp.MustCompile(`'(.*?)'`)
+	// apostrophe_wrap := re.ReplaceAllStringFunc(text_signs_correct, func(s string) string {
+	// 	clean := strings.TrimSpace(s[1:])
+	// 	clean = strings.TrimSpace(clean[:len(clean)-1])
+	// 	return "'" + clean + "'"
+	// })
 
 	// removes white space
-	space := regexp.MustCompile(`\s+`)
-	s := space.ReplaceAllString(apostrophe_wrap, " ")
-	file.WriteString(s)
+	// space := regexp.MustCompile(`\s+`)
+	// s := space.ReplaceAllString(apostrophe_wrap, " ")
+	fmt.Println(text_without_commands)
 }
