@@ -96,7 +96,7 @@ func commandFulfill(text string) string {
 		offset := i - was_com
 		switch com.name {
 		case "hex":
-			result[i-1] = strconv.Itoa(reload.AtoiBase(result[i-1], "0123456789ABCDEF"))
+			result[i-1] = strconv.Itoa(reload.AtoiBase(strings.ToUpper(result[i-1]), "0123456789ABCDEF"))
 		case "bin":
 			result[i-1] = strconv.Itoa(reload.AtoiBase(result[i-1], "01"))
 		case "up":
