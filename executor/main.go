@@ -162,7 +162,7 @@ func main() {
 	})
 
 	// A to An | a to an
-	re = regexp.MustCompile(`[aA] [aeiouh]`)
+	re = regexp.MustCompile(`[aA] [aeiouhAEIOUH]`)
 	a_to_an := re.ReplaceAllStringFunc(apostrophe_wrap, func(s string) string {
 		s_arr := strings.Split(s, "")
 		return s_arr[0] + "n" + strings.Join(s_arr[1:], "")
