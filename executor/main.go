@@ -29,34 +29,45 @@ func DefaultCommand(name string) Command {
 }
 
 // takes a (cap, 2) or anything of the sort and then places it into a struct with name and amount fields
+
 func extract_Command(s string) (Command, bool) {
-	command_list := map[string]int{
-		"hex": 1,
-		"bin": 1,
-		"up":  1,
-		"low": 1,
-		"cap": 1,
-	}
+	re := regexp.MustCompile(`\((bin|hex|cap|up|low),? ?\d?\)`)
+	found := re.FindAllString(s, -1)
+	if found == nil {
+	} else {
+		command_list := map[string]int{
+			"hex": 1,
+			"bin": 1,
+			"up":  1,
+			"low": 1,
+			"cap": 1,
+		}
 
-	store_name := ""
-	store_number := ""
+		store_name := ""
+		store_number := ""
 
-	for _, str := range s {
-		if str < 97 || str > 122 {
-			if str > 47 && str < 58 {
-				store_number += string(str)
+		for _, str := range s {
+			if str < 97 || str > 122 {
+				if str > 47 && str < 58 {
+					store_number += string(str)
+				}
+				continue
 			}
-			continue
+			store_name += string(str)
 		}
-		store_name += string(str)
-	}
-	if command_list[store_name] == 1 {
-		return_com := DefaultCommand(store_name)
-		if store_number != "" {
-			num := reload.Atoi(store_number)
-			return_com.amount = num
+		// fmt.Println("s: ", s)
+		// fmt.Println("store_name: ", store_name)
+		// fmt.Println("command_list[store_name]: ", command_list[store_name])
+		if command_list[store_name] == 1 {
+
+			return_com := DefaultCommand(store_name)
+			if store_number != "" {
+				num := reload.Atoi(store_number)
+				return_com.amount = num
+			}
+			return return_com, true
 		}
-		return return_com, true
+
 	}
 
 	return DefaultCommand("none"), false
@@ -109,6 +120,9 @@ func commandFulfill(text string) string {
 			}
 		case "cap":
 			for index := com.amount; index > 0; index-- {
+				// fmt.Println("str: ", str)
+				// fmt.Println("result: ", result[offset-index])
+				// fmt.Println("capitalized: ", strings.Title(result[offset-index]))
 				result[offset-index] = strings.Title(result[offset-index])
 			}
 		}
